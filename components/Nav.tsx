@@ -1,5 +1,6 @@
+import { MenuOutlined } from '@ant-design/icons'
 
-export const Nav = () => {
+export const Nav = ({page}) => {
     const today = new Date();
     const day = today.getDate();
     const month = today.getMonth() + 1;
@@ -9,15 +10,15 @@ export const Nav = () => {
         <tbody>
           <tr>
             <td style={{ width: '25%', textAlign: 'center' }}>
-              22
+            <MenuOutlined />
             </td>
             <td style={{ width: '50%', textAlign: 'center' }}>
               <h1>
-                {day}.{month}.{year}
+                {page}
               </h1>
             </td>
             <td style={{ width: '25%', textAlign: 'center' }}>
-              11
+              {day}.{month}.{year}
             </td>
           </tr>
         </tbody>
