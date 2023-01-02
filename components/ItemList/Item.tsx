@@ -1,20 +1,22 @@
 import { useState } from "react";
-import { IItem } from "../pages/types";
+import { IItem } from "../../pages/types";
 
 interface IProps {
     item: IItem;
 }
 
-const Item = ({item  }: IProps) => {
+
+
+const Item = ({item}: IProps) => {
   const [color, setColor] = useState('lightgrey');
   //const color = 'grey';
   const [stav, setStav] = useState('-');
   const longTouch = 300;
   let touchTimeout:any;
   let holdTimeout;
-
-  let hold = false;
+  
   let taped = true;
+  let hold = false;
 
   function eHold() {
     setStav('hold');

@@ -11,7 +11,7 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
   const {
-    query: { id, name },
+    query: { id },
     method,
   } = req
 
@@ -20,13 +20,16 @@ export default function handler(
       res.status(200).json(items)
       break
     case 'POST':
-      console.log('post requeeeeest')
-      const receivedItem = createItem('items', req.query);
+      console.log('query ' + JSON.stringify(req.query))
+      console.log('body ' + JSON.stringify(req.body))
+      const receivedItem = createItem(req.body);
       if (receivedItem) {
+        console.log(receivedItem)
         items.push(receivedItem);
-        res.status(201).send(receivedItem);
+        res.status(201).send(items);
       } else {
-        res.status(400).send('Error - not created');
+        console.log('Not created')
+        res.status(400).send('Erroryy - not created');
       }
       break
     default:

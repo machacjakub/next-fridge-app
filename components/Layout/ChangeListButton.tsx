@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useContext } from 'react';
 
 interface IProps {
-  handlePageChange: () => void;
+  handlePageChange: (x: number) => void;
   direction: number;
 }
 

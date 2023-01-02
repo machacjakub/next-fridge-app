@@ -1,18 +1,8 @@
 //'use client';
 
 import { AnimatePresence, motion } from "framer-motion";
+import { IItem } from "../../pages/types";
 import Item from "./Item";
-
-type State = 'toBuy' | 'inFridge' | 'open' | 'deleted';
-type Category = 'Diary' | 'Fruit' | 'Vegetable' | 'Meat' | 'Egg' | 'Other';
-interface IItem {
-    id: number;
-    name: string;
-    expire: string;
-    count: number;
-    state: State;
-    category: Category;
-  }
 
 export const ItemsList = ({items}:any) => {
     return (

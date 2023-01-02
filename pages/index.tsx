@@ -1,27 +1,59 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import BottomBar from '../components/BottomBar'
-import { ItemsList } from '../components/ItemsList'
-import { Nav } from '../components/Nav'
-import { IItem, TState } from './types'
+import BottomBar from '../components/Layout/BottomBar'
+import { FormComponent } from '../components/Form/FormComponent'
+import { ItemsList } from '../components/ItemList/ItemsList'
+import { Nav } from '../components/Layout/Nav'
+import { IFormData, IItem, TItems, TState } from './types'
 
 export default function Home() {
-  const [data, setData] = useState(null)
+  console.log('Homepage renders')
+  const [data, setData] = useState<TItems|null>(null)
   const [page, setPage] = useState<number>(1)
+  const [isLoading, setLoading] = useState(false)
+  const [formIsDisplayed, setFormDisplayed] = useState<boolean>(false)
   const pages = ['toBuy', 'inFridge', 'deleted']
   const handlePageChange = (x: number) => {
     if(page + x > 2 || page + x < 0 ) return;
     setPage(page+x)
   }
-  const [backend, setBe] = useState('nodata')
+
+  const handleFormSubmit = async ({name, expire, count, category}:IFormData) => {
+    try {
+      const response = await fetch('/api/items', {
+        method: 'POST',
+        body: JSON.stringify(
+          {
+            name: name,
+            expire: expire,
+            count: count,
+            category: category,
+            state: pages[1]
+          }
+        ),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const datas = await response.json();
+      setData(datas);
+      setFormDisplayed(false)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const displayForm = () => {
+    setFormDisplayed(true);
+  }
 
   useEffect(() => {
-    //setLoading(true)
+    setLoading(true)
     fetch('/api/items')
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: TItems) => {
         setData(data)
-        //setLoading(false)
+        setLoading(false)
       })
   }, [])
   return (
@@ -34,8 +66,9 @@ export default function Home() {
       </Head>
         <div>
             <Nav page={pages[page]}/>
+            <FormComponent handleFormSubmit={handleFormSubmit} isDisplayed={formIsDisplayed}/>
             <ItemsList items={data  ? data.filter((item: IItem) => item.state === pages[page]) : null} />
-            <BottomBar handlePageChange={handlePageChange}/>
+            <BottomBar handlePageChange={handlePageChange} handleFormOpen={displayForm} />
         </div>
     </>
   )

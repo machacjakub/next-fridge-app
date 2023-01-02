@@ -16,12 +16,14 @@ export const updateItem = (id: string, queryArguments: any, elementList: TItems)
     return elementList[elementIndex];
   };
 
-export const createItem = (elementType: any, queryArguments: any): IItem|false => {
+export const createItem = (queryArguments: any): IItem|false => {
+  console.log('createItem')
     if (queryArguments.hasOwnProperty('name') &&
         queryArguments.hasOwnProperty('expire') &&
         queryArguments.hasOwnProperty('count') &&
         queryArguments.hasOwnProperty('state') &&
         queryArguments.hasOwnProperty('category')) {
+          console.log('createItem - true')
         let currentId:number;
         itemIdCounter += 1;
         currentId = itemIdCounter;

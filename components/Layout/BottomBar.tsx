@@ -1,9 +1,14 @@
 import * as React from 'react';
-import Item from './Item';
+import Item from '../ItemList/Item';
 import AddItemButton from './AddItemButton';
 import ChangeListButton from './ChangeListButton';
 
-function BottomBar({handlePageChange}:any) {
+interface IProps {
+  handlePageChange: (x: number) => void;
+  handleFormOpen: () => void;
+}
+
+function BottomBar({handlePageChange, handleFormOpen} :IProps) {
   return (
     <div style={{
       display: "flex",
@@ -16,7 +21,7 @@ function BottomBar({handlePageChange}:any) {
       backgroundColor: 'white',
     }}>
       <ChangeListButton handlePageChange={handlePageChange} direction={-1}/>
-      <AddItemButton />
+      <AddItemButton handleClick={handleFormOpen} />
       <ChangeListButton handlePageChange={handlePageChange} direction={1}/>
     </div>
   );
