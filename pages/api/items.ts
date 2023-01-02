@@ -20,16 +20,12 @@ export default function handler(
       res.status(200).json(items)
       break
     case 'POST':
-      console.log('query ' + JSON.stringify(req.query))
-      console.log('body ' + JSON.stringify(req.body))
       const receivedItem = createItem(req.body);
       if (receivedItem) {
-        console.log(receivedItem)
         items.push(receivedItem);
         res.status(201).send(items);
       } else {
-        console.log('Not created')
-        res.status(400).send('Erroryy - not created');
+        res.status(400).send('Error - not created');
       }
       break
     default:
