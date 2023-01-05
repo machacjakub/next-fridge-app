@@ -6,28 +6,29 @@ import Item from "./Item";
 
 interface IProps {
   items: TItems;
-  handleItemTap: (id:number) => void;
+  handleItemTap: ( item: IItem ) => void;
+  handleItemDoubleTap: ( item: IItem ) => void;
 }
 
-export const ItemsList = ({items, handleItemTap}:IProps) => {
-    return (
-      <AnimatePresence>
-        {items ? items.map(  (item: IItem ) => (
-          <motion.div
-          key={item.id}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{
-            type: 'spring',
-            duration: 0.6,
-            damping: 25,
-          }}
-          layout
-        >
-            <Item key={item.id} item={item} handleTap={handleItemTap} />
-            </motion.div>
-        )) : 'nodata'}
-      </AnimatePresence>
-    );
-  }
+export const ItemsList = ( { items, handleItemTap, handleItemDoubleTap }:IProps ) => {
+	return (
+		<AnimatePresence>
+			{items ? items.map( ( item: IItem ) => (
+				<motion.div
+					key={item.id}
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+					transition={{
+						type: 'spring',
+						duration: 0.6,
+						damping: 25,
+					}}
+					layout
+				>
+					<Item key={item.id} item={item} handleTap={handleItemTap} handleDoubleTap={handleItemDoubleTap} />
+				</motion.div>
+			) ) : 'nodata'}
+		</AnimatePresence>
+	);
+};
