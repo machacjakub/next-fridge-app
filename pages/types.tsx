@@ -8,6 +8,13 @@ export interface IItem {
     state: TState;
     category: TCategory;
 }
+export interface IItemToAdd {
+    name: string;
+    expire: string;
+    count: number;
+    state: TState;
+    category: TCategory;
+}
 export interface IFormData {
     name: string;
     expire: string;

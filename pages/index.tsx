@@ -4,42 +4,63 @@ import BottomBar from '../components/Layout/BottomBar'
 import { FormComponent } from '../components/Form/FormComponent'
 import { ItemsList } from '../components/ItemList/ItemsList'
 import { Nav } from '../components/Layout/Nav'
-import { IFormData, IItem, TItems, TState } from './types'
+import { IFormData, IItem, IItemToAdd, TItems, TState } from './types'
+import { belongsToPage, returnNext } from './utils'
+import { postRequest, putRequest } from './apiRequests'
 
 export default function Home() {
   console.log('Homepage renders')
-  const [data, setData] = useState<TItems|null>(null)
+  const [items, setItems] = useState<TItems|null>(null)
   const [page, setPage] = useState<number>(1)
   const [isLoading, setLoading] = useState(false)
   const [formIsDisplayed, setFormDisplayed] = useState<boolean>(false)
-  const pages = ['toBuy', 'inFridge', 'deleted']
-  const handlePageChange = (x: number) => {
-    if(page + x > 2 || page + x < 0 ) return;
-    setPage(page+x)
+  const pages: TState[] = ['toBuy', 'inFridge', 'deleted']
+  
+  useEffect(() => {
+    setLoading(true)
+    fetch('/api/items')
+      .then((res) => res.json())
+      .then((data: TItems) => {
+        setItems(data)
+        setLoading(false)
+      })
+  }, [])
+
+  const addItem = async ( item: IItemToAdd  ) => {
+    const data = await postRequest(item);
+    setItems(data);
   }
 
-  const handleFormSubmit = async ({name, expire, count, category}:IFormData) => {
-    try {
-      const response = await fetch('/api/items', {
-        method: 'POST',
-        body: JSON.stringify(
-          {
-            name: name,
-            expire: expire,
-            count: count,
-            category: category,
-            state: pages[1]
-          }
-        ),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      const datas = await response.json();
-      setData(datas);
-      setFormDisplayed(false)
-    } catch (error) {
-      console.error(error);
+  const changeItem = async (item: IItem) => {
+    const data = await putRequest(item)
+    setItems(data);
+  }
+
+  const handleFormSubmit = (item: IFormData) => {
+    addItem({...item, state: pages[page]})
+    setFormDisplayed(false);
+  }
+
+  const handlePageChange = (x: number) => {
+    if(page + x > 2 || page + x < 0 ) return;
+      setPage(page+x)
+  }
+
+  const handleItemTap = (id:number) => {
+    if(!items)return;
+    if(!items[id])return;
+    const item: IItem = {...items[id]};
+    console.log(JSON.stringify(item));
+    if (item.count === 1) {
+      item.state = returnNext(item.state);
+      changeItem(item);
+    } else {
+      let {name, expire, count, category, state} = {...item};
+      count = 1;
+      state = returnNext(state);
+      addItem({name, expire, count, category, state});
+      item.count -= 1;
+      changeItem(item);
     }
   }
 
@@ -47,15 +68,8 @@ export default function Home() {
     setFormDisplayed(true);
   }
 
-  useEffect(() => {
-    setLoading(true)
-    fetch('/api/items')
-      .then((res) => res.json())
-      .then((data: TItems) => {
-        setData(data)
-        setLoading(false)
-      })
-  }, [])
+  if(isLoading || !items) return <p>isLoading</p>;
+  
   return (
     <>
       <Head>
@@ -67,7 +81,7 @@ export default function Home() {
         <div>
             <Nav page={pages[page]}/>
             <FormComponent handleFormSubmit={handleFormSubmit} isDisplayed={formIsDisplayed}/>
-            <ItemsList items={data  ? data.filter((item: IItem) => item.state === pages[page]) : null} />
+            <ItemsList items={items.filter((item: IItem) => belongsToPage(item.state, pages[page]))} handleItemTap={handleItemTap} />
             <BottomBar handlePageChange={handlePageChange} handleFormOpen={displayForm} />
         </div>
     </>

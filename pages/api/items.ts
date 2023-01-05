@@ -17,9 +17,11 @@ export default function handler(
 
   switch (method) {
     case 'GET':
+      console.log('--- GET all')
       res.status(200).json(items)
       break
     case 'POST':
+      console.log('--- POST ')
       const receivedItem = createItem(req.body);
       if (receivedItem) {
         items.push(receivedItem);

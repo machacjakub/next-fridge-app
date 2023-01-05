@@ -2,12 +2,13 @@ import { useState } from "react";
 import { IItem } from "../../pages/types";
 
 interface IProps {
-    item: IItem;
+  item: IItem;
+  handleTap: (id: number) => void;
 }
 
 
 
-const Item = ({item}: IProps) => {
+const Item = ({item, handleTap}: IProps) => {
   const [color, setColor] = useState('lightgrey');
   //const color = 'grey';
   const [stav, setStav] = useState('-');
@@ -27,12 +28,12 @@ const Item = ({item}: IProps) => {
 
   function eClick() {
     setStav('click');
-    //handleItemTap(props.item.id);
+    handleTap(item.id);
     console.log('click')
   }
 
   function eDouble() {
-    //handleItemDoubleTap(props.item.id);
+    //handleItemDoubleTap(item.id);
     console.log('d-click')
   }
 

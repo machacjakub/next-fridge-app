@@ -1,10 +1,15 @@
 //'use client';
 
 import { AnimatePresence, motion } from "framer-motion";
-import { IItem } from "../../pages/types";
+import { IItem, TItems } from "../../pages/types";
 import Item from "./Item";
 
-export const ItemsList = ({items}:any) => {
+interface IProps {
+  items: TItems;
+  handleItemTap: (id:number) => void;
+}
+
+export const ItemsList = ({items, handleItemTap}:IProps) => {
     return (
       <AnimatePresence>
         {items ? items.map(  (item: IItem ) => (
@@ -20,7 +25,7 @@ export const ItemsList = ({items}:any) => {
           }}
           layout
         >
-            <Item key={item.id} item={item} />
+            <Item key={item.id} item={item} handleTap={handleItemTap} />
             </motion.div>
         )) : 'nodata'}
       </AnimatePresence>
