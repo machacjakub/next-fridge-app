@@ -11,7 +11,6 @@ export default async function handler(
 	res: NextApiResponse<Data>
 ) {
 	const {
-		query: { id },
 		method,
 	} = req;
 

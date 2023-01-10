@@ -10,10 +10,10 @@ import {
 } from 'antd';
 import { readableDate, toDate } from './utils';
 import { pipe } from 'fputils';
-import { IFormData, TCategory } from '../../pages/types';
+import { TCategory } from '../../pages/types';
 
 interface IProps {
-  handleFormSubmit: ( {name, expire, count, category}:IFormData ) => void;
+  handleFormSubmit: () => void;
   isDisplayed: boolean
 }
 
@@ -29,14 +29,14 @@ export const FormComponent = ( {handleFormSubmit, isDisplayed}: IProps ) => {
 	const [expire, setExpire] = useState<string>( '' );
 	const [count, setCount] = useState<number>( 1 );
 	const [category, setCategory] = useState<TCategory>( 'other' );
-
+	/*
 	const style = {
 		backgroundColor: 'lightblue',
 		padding: '18px 22px',
 		margin: '15px 5px',
 		borderRadius: '15px',
 	};
-
+*/
 	const handleChange = ( { nameI, expirationI, countI, categoryI }: IOnChangeP ) => {
 		if ( nameI ) setName( nameI );
 		if ( expirationI ) pipe( expirationI, toDate, readableDate, setExpire );
