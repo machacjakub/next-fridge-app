@@ -1,18 +1,24 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { items } from '../../../database/data';
-import { updateItem } from '../../../database/dbUpdate';
-import { getElementById, getIndexById } from '../../../database/utils';
+import { updateItem } from '../../../database/apiHandlers';
+import { getIndexById, getItemById } from '../../../database/utils';
+import { readData } from '../../../database/dbUpdate';
 
-export default function userHandler( req: NextApiRequest, res: NextApiResponse ) {
+export default async function userHandler( req: NextApiRequest, res: NextApiResponse ) {
 	const {
 		query: { id },
 		method,
 	} = req;
 
+	let itemId: number = -1;
+
+	if ( typeof id === 'string' ){
+		itemId = Number( id );
+	}
 	switch ( method ) {
 	case 'GET':
 		console.log( '--- GET item ' + id );
-		const foundItem = getElementById( id, items );
+		const foundItem = getItemById( itemId, readData() );
 		if ( foundItem ) {
 			res.send( foundItem );
 		} else {
@@ -21,11 +27,12 @@ export default function userHandler( req: NextApiRequest, res: NextApiResponse )
 		break;
 	case 'PUT':
 		console.log( '--- PUT item ' + id );
-		const idxToUpdate = getIndexById( id, items );
-		console.log( 'updateeeee' );
-		if ( idxToUpdate !== -1 ) {
-			updateItem( id, req.body, items );
-			res.send( items );
+		const indexToUpdate = getIndexById( itemId, readData() );
+		if ( indexToUpdate !== -1 ) {
+			console.log( `put - index: ${indexToUpdate}, itemId: ${itemId}, item: ${JSON.stringify( readData()[indexToUpdate] )}` );
+			console.log( 'rq body ' + JSON.stringify( req.body ) );
+			const newItems = await updateItem( indexToUpdate, req.body );
+			res.send( newItems );
 		} else {
 			res.status( 404 ).send( 'Error - item not updated' );
 		}

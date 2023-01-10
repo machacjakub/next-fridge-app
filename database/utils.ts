@@ -1,13 +1,13 @@
 import { TItems } from "../pages/types";
 
-export const getElementById = ( id: string, elementList: TItems ) => {
-	return elementList.find( ( element ) => {
-		return element.id === Number( id );
+export const getItemById = ( id: number, itemList: TItems ) => {
+	return itemList.find( ( item ) => {
+		return item.id === id;
 	} );
 };
 
-export const getIndexById = ( id: string, elementList: TItems ) => {
-	return elementList.findIndex( ( element ) => {
-		return element.id === Number( id );
+export const getIndexById = ( id: number, itemsList: TItems ): number => {
+	return itemsList.findIndex( ( item ) => {
+		return item.id === id ;
 	} );
 };

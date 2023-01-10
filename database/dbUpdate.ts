@@ -1,41 +1,32 @@
 import { IItem, TItems } from "../pages/types";
 import { items } from "./data";
-import { getIndexById } from "./utils";
 
-let itemIdCounter = items.length - 1;
+const fs = require( 'fs' );
 
-export const updateItem = ( id: string, queryArguments: any, elementList: TItems ) => {
-	const elementIndex = getIndexById( id, elementList );
-	if ( elementIndex === -1 ) {
-		throw new Error( 'updateElement must be called with a valid id parameter' );
-	}
-	if ( queryArguments.id ) {
-		queryArguments.id = Number( queryArguments.id );
-	}
-	Object.assign( elementList[elementIndex], queryArguments );
-	return elementList[elementIndex];
+export const readData = (): TItems => {
+	  return [...items];
 };
 
-export const createItem = ( queryArguments: any ): IItem|false => {
-	console.log( 'createItem' );
-	if ( queryArguments.hasOwnProperty( 'name' ) &&
-        queryArguments.hasOwnProperty( 'expire' ) &&
-        queryArguments.hasOwnProperty( 'count' ) &&
-        queryArguments.hasOwnProperty( 'state' ) &&
-        queryArguments.hasOwnProperty( 'category' ) ) {
-		console.log( 'createItem - true' );
-		let currentId:number;
-		itemIdCounter += 1;
-		currentId = itemIdCounter;
-		return {
-			'id':    currentId,
-			'name': queryArguments.name,
-			'expire':  queryArguments.expire,
-			'count':  queryArguments.count,
-			'state':  queryArguments.state,
-			'category':  queryArguments.category,
-		};
-	} else {
-		return false;
+export const changeItem = async ( i: number, itemBody: IItem ) => {
+	const newItems = [...items];
+	newItems[i] = itemBody;
+	await storeData( newItems );
+	console.log( 'changeItem - ' + JSON.stringify( itemBody ) );
+	console.log( 'item changed' );
+	return newItems;
+};
+
+export const appendItem = async ( item: IItem ) => {
+	const newItems = [...items, item];
+	await storeData( newItems );
+	console.log( 'item appended' );
+	return newItems;
+};
+
+const storeData = async ( data: any ) => {
+	try {
+		await fs.promises.writeFile( './database/data.ts', `import { TItems } from "../pages/types";\nexport const items: TItems = ${JSON.stringify( data )};` );
+	} catch ( err ) {
+		console.error( err );
 	}
 };

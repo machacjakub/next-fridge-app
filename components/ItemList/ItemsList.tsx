@@ -12,23 +12,25 @@ interface IProps {
 
 export const ItemsList = ( { items, handleItemTap, handleItemDoubleTap }:IProps ) => {
 	return (
-		<AnimatePresence>
-			{items ? items.map( ( item: IItem ) => (
-				<motion.div
-					key={item.id}
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					exit={{ opacity: 0 }}
-					transition={{
-						type: 'spring',
-						duration: 0.6,
-						damping: 25,
-					}}
-					layout
-				>
-					<Item key={item.id} item={item} handleTap={handleItemTap} handleDoubleTap={handleItemDoubleTap} />
-				</motion.div>
-			) ) : 'nodata'}
-		</AnimatePresence>
+		<div style={{marginBottom: '100px'}}>
+			<AnimatePresence >
+				{items ? items.map( ( item: IItem ) => (
+					<motion.div
+						key={item.id}
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						transition={{
+							type: 'spring',
+							duration: 0.6,
+							damping: 25,
+						}}
+						layout
+					>
+						<Item key={item.id} item={item} handleTap={handleItemTap} handleDoubleTap={handleItemDoubleTap} />
+					</motion.div>
+				) ) : 'nodata'}
+			</AnimatePresence>
+		</div>
 	);
 };

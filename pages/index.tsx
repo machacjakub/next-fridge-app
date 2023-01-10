@@ -14,9 +14,10 @@ export default function Home() {
 	const [isLoading, setLoading] = useState( false );
 	const [formIsDisplayed, setFormDisplayed] = useState<boolean>( false );
 	const pages: TState[] = ['toBuy', 'inFridge', 'deleted'];
-  
+	console.log( 'rednder' );
 	useEffect( () => {
 		setLoading( true );
+		console.log( 'useEfect' );
 		fetch( '/api/items' )
 			.then( ( res ) => res.json() )
 			.then( ( data: TItems ) => {
@@ -28,11 +29,13 @@ export default function Home() {
 	const addItem = async ( item: IItemToAdd ) => {
 		const data = await postRequest( item );
 		setItems( data );
+		return data;
 	};
 
 	const changeItem = async ( item: IItem ) => {
 		const data = await putRequest( item );
 		setItems( data );
+		return data;
 	};
 
 	const handleFormSubmit = ( item: IFormData ) => {
@@ -45,21 +48,28 @@ export default function Home() {
 		setPage( page+increment );
 	};
 
-	const handleItemTap = ( {...item}: IItem ) => {
-		console.log( JSON.stringify( item ) );
+	const handleItemTap = async ( {...item}: IItem ) => {
+		console.log( 'handleTap: ' + JSON.stringify( item ) );
 		if ( item.count === 1 ) {
+			console.log( 'handleTap: item.count === 1' );
 			item.state = returnNext( item.state );
 			changeItem( item );
 		} else if ( item.state === 'toBuy' ) {
+			console.log( 'handleTap: item.state === toBuy' );
 			item.state = 'inFridge';
 			changeItem( item );
 		} else {
+			console.log( 'handleTap: else' );
 			let {name, expire, count, category, state}: IItemToAdd = {...item};
+			let oldItem = {...item};
 			count = 1;
 			state = returnNext( state );
-			addItem( {name, expire, count, category, state} );
-			item.count -= 1;
-			changeItem( item );
+			await addItem( {name, expire, count, category, state} );
+			console.log( oldItem.count );
+			oldItem.count -= 1;
+			console.log( oldItem.count );
+			await changeItem( oldItem );
+			console.log( 'handleTap: newItem: count: ' + count + ' oldItem: ' + JSON.stringify( oldItem ) );
 		}
 	};
 

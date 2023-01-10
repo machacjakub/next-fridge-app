@@ -1,6 +1,7 @@
 import { IItem, IItemToAdd } from "./types";
 
 export const postRequest = async ( {name, expire, count, category, state}:IItemToAdd ) => {
+	console.log( 'sending post request' );
 	try {
 		const response = await fetch( '/api/items', {
 			method: 'POST',
@@ -10,7 +11,8 @@ export const postRequest = async ( {name, expire, count, category, state}:IItemT
 					expire: expire,
 					count: count,
 					category: category,
-					state: state //TODO - aby slo pridat jen na listy toBuy a inFridge
+					state: state
+					//TODO - aby slo pridat jen na listy toBuy a inFridge
 				}
 			),
 			headers: {
@@ -18,6 +20,7 @@ export const postRequest = async ( {name, expire, count, category, state}:IItemT
 			}
 		} );
 		const data = await response.json();
+		console.log( 'response recieved, item created and persistent (post)' );
 		return data;
 	} catch ( error ) {
 		console.error( error );
@@ -30,7 +33,6 @@ export const putRequest = async ( item: IItem ) => {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json',
-			'Authorization': 'Bearer abcdefghijk'
 		},
 		body: JSON.stringify( item )
 	} );

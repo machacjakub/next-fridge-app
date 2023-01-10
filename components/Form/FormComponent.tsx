@@ -1,20 +1,19 @@
 import * as React from 'react';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-  Select,
+	Button,
+	DatePicker,
+	Form,
+	Input,
+	InputNumber,
+	Select,
 } from 'antd';
 import { readableDate, toDate } from './utils';
 import { pipe } from 'fputils';
 import { IFormData, TCategory } from '../../pages/types';
 
 interface IProps {
-  handleFormSubmit: ({name, expire, count, category}:IFormData) => void;
+  handleFormSubmit: ( {name, expire, count, category}:IFormData ) => void;
   isDisplayed: boolean
 }
 
@@ -25,67 +24,67 @@ interface IOnChangeP {
   categoryI: TCategory;
 };
 
-export const FormComponent = ({handleFormSubmit, isDisplayed}: IProps) => {
-  const [name, setName] = useState<string>('');
-  const [expire, setExpire] = useState<string>('');
-  const [count, setCount] = useState<number>(1);
-  const [category, setCategory] = useState<TCategory>('other');
+export const FormComponent = ( {handleFormSubmit, isDisplayed}: IProps ) => {
+	const [name, setName] = useState<string>( '' );
+	const [expire, setExpire] = useState<string>( '' );
+	const [count, setCount] = useState<number>( 1 );
+	const [category, setCategory] = useState<TCategory>( 'other' );
 
-  const style = {
-    backgroundColor: 'lightblue',
-    padding: '18px 22px',
-    margin: '15px 5px',
-    borderRadius: '15px',
-  };
+	const style = {
+		backgroundColor: 'lightblue',
+		padding: '18px 22px',
+		margin: '15px 5px',
+		borderRadius: '15px',
+	};
 
-  const handleChange = ({ nameI, expirationI, countI, categoryI }: IOnChangeP) => {
-    if(nameI) setName(nameI);
-    if(expirationI) pipe(expirationI, toDate, readableDate, setExpire);
-    if(countI) setCount(countI);
-    if(categoryI) setCategory(categoryI);
-  };
+	const handleChange = ( { nameI, expirationI, countI, categoryI }: IOnChangeP ) => {
+		if ( nameI ) setName( nameI );
+		if ( expirationI ) pipe( expirationI, toDate, readableDate, setExpire );
+		if ( countI ) setCount( countI );
+		if ( categoryI ) setCategory( categoryI );
+	};
 
-  const handleSubmit = () => {
-    console.log('handleSub ' + name + " " + expire + " " + count + " " + category);
-    handleFormSubmit({name, expire, count, category});
-  }
+	const handleSubmit = () => {
+		console.log( 'handleSub ' + name + " " + expire + " " + count + " " + category );
+		handleFormSubmit( {name, expire, count, category} );
+	};
 
-  return (
-    <Form
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 14 }}
-      layout="horizontal"
-      initialValues={{ count: 1 }}
-      onValuesChange={handleChange}
-      onFinish={handleSubmit}
-      size={'small'}
-      style={{display: isDisplayed ? '' : 'none',backgroundColor: 'white', border: 'solid lightgrey 1px', borderRadius: '15px', padding: '14px', position: 'fixed', left: '0', right: '0', margin: '0 10% 0 10%', zIndex: 10}}
-    >
-      <Form.Item label="Name" name='nameI' style={{margin: '0 30px 10px 0'}} >
-        <Input/>
-      </Form.Item>
-      <Form.Item label="Expire" name='expirationI' style={{margin: '0 0 10px'}}>
-        <DatePicker />
-      </Form.Item>
-      <Form.Item label="Count" name='countI' style={{margin: '0 0 10px'}}>
-        <InputNumber />
-      </Form.Item>
-      <Form.Item label="Category" name="categoryI" style={{margin: '0 0 10px'}}>
-        <Select>
-          <Select.Option value="diary">Diary</Select.Option>
-          <Select.Option value="fruit">Fruit</Select.Option>
-          <Select.Option value="vegetable">Vegetable</Select.Option>
-          <Select.Option value="meat">Meat</Select.Option>
-          <Select.Option value="egg">Egg</Select.Option>
-          <Select.Option value="other">Other</Select.Option>
-        </Select>
-      </Form.Item>
-      <Form.Item style={{margin: '30px 0 10px'}}>
-        <Button style={{width: '100px'}} type="primary" htmlType="submit">Submit</Button>
-      </Form.Item>
-    </Form>
-  );
-  /*
+	return (
+		<Form
+			labelCol={{ span: 4 }}
+			wrapperCol={{ span: 14 }}
+			layout="horizontal"
+			initialValues={{ count: 1 }}
+			onValuesChange={handleChange}
+			onFinish={handleSubmit}
+			size={'small'}
+			style={{display: isDisplayed ? '' : 'none',backgroundColor: 'white', border: 'solid lightgrey 1px', borderRadius: '15px', padding: '14px', position: 'fixed', left: '0', right: '0', margin: '0 10% 0 10%', zIndex: 10}}
+		>
+			<Form.Item label="Name" name='nameI' style={{margin: '0 30px 10px 0'}} >
+				<Input/>
+			</Form.Item>
+			<Form.Item label="Expire" name='expirationI' style={{margin: '0 0 10px'}}>
+				<DatePicker />
+			</Form.Item>
+			<Form.Item label="Count" name='countI' style={{margin: '0 0 10px'}}>
+				<InputNumber />
+			</Form.Item>
+			<Form.Item label="Category" name="categoryI" style={{margin: '0 0 10px'}}>
+				<Select>
+					<Select.Option value="diary">Diary</Select.Option>
+					<Select.Option value="fruit">Fruit</Select.Option>
+					<Select.Option value="vegetable">Vegetable</Select.Option>
+					<Select.Option value="meat">Meat</Select.Option>
+					<Select.Option value="egg">Egg</Select.Option>
+					<Select.Option value="other">Other</Select.Option>
+				</Select>
+			</Form.Item>
+			<Form.Item style={{margin: '30px 0 10px'}}>
+				<Button style={{width: '100px'}} type="primary" htmlType="submit">Submit</Button>
+			</Form.Item>
+		</Form>
+	);
+	/*
   return (
     <div style={style}>
       <Form
@@ -202,4 +201,4 @@ export const FormComponent = ({handleFormSubmit, isDisplayed}: IProps) => {
       </Form>
     </div>
   );*/
-}
+};
