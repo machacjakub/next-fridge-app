@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-vars */
 import * as React from 'react';
 import { useState } from 'react';
 import {
@@ -13,7 +14,7 @@ import { pipe } from 'fputils';
 import { TCategory } from '../../pages/types';
 
 interface IProps {
-  handleFormSubmit: () => void;
+  handleFormSubmit: ( {name, expire, count, category}:any ) => void;
   isDisplayed: boolean
 }
 
