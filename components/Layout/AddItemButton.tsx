@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 import { PlusOutlined } from '@ant-design/icons';
 import * as React from 'react';
 

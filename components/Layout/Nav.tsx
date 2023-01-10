@@ -1,6 +1,7 @@
+/* eslint-disable no-restricted-imports */
 import { MenuOutlined } from '@ant-design/icons';
 
-export const Nav = ( {page} ) => {
+export const Nav = ( {page}:any ) => {
 	const today = new Date();
 	const day = today.getDate();
 	const month = today.getMonth() + 1;
