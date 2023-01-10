@@ -39,12 +39,12 @@ export default async function userHandler( req: NextApiRequest, res: NextApiResp
 		break;
 	case 'DELETE':
 		console.log( '--- DELETE item ' + id );
-		const idxToDelete = getIndexById( id, items );
+		const idxToDelete = getIndexById( itemId, items );
 		if ( idxToDelete !== -1 ) {
 			items.splice( idxToDelete, 1 );
-			res.status( 204 ).send();
+			res.status( 204 ).send( 'newItems' );
 		} else {
-			res.status( 404 ).send();
+			res.status( 404 ).send( 'Error - item not deleted' );
 		}
 		break;
 	default:

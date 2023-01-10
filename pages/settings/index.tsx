@@ -1,9 +1,9 @@
 import React from 'react';
 
 export const Settings = () => {
-    return (
-        <div>
+	return (
+		<div>
             
-        </div>
-    );
+		</div>
+	);
 };
